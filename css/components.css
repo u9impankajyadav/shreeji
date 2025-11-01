@@ -588,6 +588,11 @@
         font-size: 1.75rem !important;
     }
 
+    .pharmacy section > div > div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
     .contact-icon {
         width: 40px;
         height: 40px;
