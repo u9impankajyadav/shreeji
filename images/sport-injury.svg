@@ -1,0 +1,19 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sportGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#sportGrad)"/>
+  <!-- Running figure with injury -->
+  <circle cx="400" cy="120" r="30" fill="#ffffff" opacity="0.9"/>
+  <rect x="375" y="150" width="50" height="100" fill="#ffffff" opacity="0.9" rx="5"/>
+  <line x1="370" y1="180" x2="330" y2="160" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="430" y1="180" x2="470" y2="160" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="330" y2="160" r="12" fill="#ffffff" opacity="0.8"/>
+  <line x1="390" y1="250" x2="360" y2="300" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="410" y1="250" x2="440" y2="300" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <text x="400" y="350" text-anchor="middle" fill="#ffffff" font-size="32" font-weight="bold" font-family="Arial, sans-serif">Sports Injury</text>
+</svg>
+

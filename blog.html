@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive physiotherapy blog covering all services at Shreeji Physiotherapy & Rehabilitation Centre">
+    <title>Blog - Shreeji Physiotherapy & Rehabilitation Centre</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        /* Blog Specific Styles */
+        .blog-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+
+        .blog-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-controls {
+            background: var(--bg-white);
+            padding: 2rem 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+
+        .search-filter-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box svg {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--text-light);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-white);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 3rem 0;
+        }
+
+        .blog-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .blog-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .blog-excerpt {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .read-more:hover {
+            gap: 0.75rem;
+        }
+
+        .blog-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .blog-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            margin: auto;
+        }
+
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-white);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .modal-content p {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content li {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-filter-container {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Stylized S-shaped human figure (S letter) -->
+                        <circle cx="15" cy="12" r="3" fill="#9333ea"/>
+                        <path d="M15 15 Q12 20 14 25 Q16 30 15 35" stroke="#2563eb" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <ellipse cx="14" cy="25" rx="4" ry="8" fill="#9333ea" opacity="0.7"/>
+                        <!-- Spine/Torso Icon -->
+                        <circle cx="30" cy="15" r="6" stroke="#10b981" stroke-width="1.5" fill="none"/>
+                        <rect x="27" y="12" width="6" height="8" rx="1" fill="#9333ea" opacity="0.3"/>
+                        <line x1="30" y1="12" x2="30" y2="20" stroke="#10b981" stroke-width="2"/>
+                        <path d="M28 20 Q30 22 32 20" stroke="#10b981" stroke-width="1.5" fill="none"/>
+                        <!-- Wheelchair Icon -->
+                        <circle cx="40" cy="22" r="4" stroke="#6b7280" stroke-width="1.5" fill="none"/>
+                        <rect x="36" y="24" width="8" height="3" rx="1" fill="#6b7280" opacity="0.3"/>
+                        <!-- Walking Figures Icon -->
+                        <line x1="18" y1="38" x2="18" y2="42" stroke="#6b7280" stroke-width="1.5"/>
+                        <line x1="22" y1="38" x2="22" y2="42" stroke="#6b7280" stroke-width="1.5"/>
+                        <line x1="16" y1="38" x2="24" y2="38" stroke="#6b7280" stroke-width="1.5"/>
+                        <circle cx="18" cy="36" r="1.5" fill="#ef4444"/>
+                        <circle cx="22" cy="36" r="1.5" fill="#9333ea"/>
+                    </svg>
+                    <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                        <span style="font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Shreeji</span>
+                        <span style="font-size: 0.65rem; color: #10b981; font-weight: 500;">Physiotherapy & Rehabilitation</span>
+                    </div>
+                </a>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1>Physiotherapy Blog</h1>
+            <p style="font-size: 1.25rem; opacity: 0.95;">Expert insights, treatment guides, and recovery tips</p>
+        </div>
+    </section>
+
+    <!-- Blog Controls -->
+    <section class="blog-controls">
+        <div class="container">
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search articles...">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">All</button>
+                    <button class="filter-btn" data-category="orthopedic">Orthopedic</button>
+                    <button class="filter-btn" data-category="neurological">Neurological</button>
+                    <button class="filter-btn" data-category="sports">Sports</button>
+                    <button class="filter-btn" data-category="womens-health">Women's Health</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="blog-grid" id="blogGrid">
+                <!-- Blog posts will be inserted here by JavaScript -->
+            </div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <h3>No articles found</h3>
+                <p>Try adjusting your search or filter criteria.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Modal -->
+    <div class="blog-modal" id="blogModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Shreeji Physiotherapy</h4>
+                    <p>Your trusted partner in physiotherapy and rehabilitation. The Health Center for Integrative Therapies.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="index.html#services">Osteoarthritis</a></li>
+                        <li><a href="index.html#services">Sport Injury</a></li>
+                        <li><a href="index.html#services">Spinal Conditions</a></li>
+                        <li><a href="index.html#services">Neurological Rehab</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>Phone: 9355783022</p>
+                    <p>Plot No. 65E, Sec.-12<br>Greater Noida West<br>Gautam Buddha Nagar (U.P)</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Shreeji Physiotherapy & Rehabilitation Centre. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Blog Data
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Understanding Osteoarthritis: Causes, Symptoms, and Treatment",
+                category: "orthopedic",
+                excerpt: "Osteoarthritis is the most common form of arthritis, affecting millions worldwide. Learn about its causes, early warning signs, and effective physiotherapy treatments.",
+                image: 'images/osteoarthritis.svg',
+                date: "March 15, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/osteoarthritis.svg" alt="Osteoarthritis Treatment" class="modal-image">
+                    <h3>What is Osteoarthritis?</h3>
+                    <p>Osteoarthritis (OA) is a degenerative joint disease that affects the cartilage and underlying bone. It commonly occurs in weight-bearing joints such as knees, hips, and spine, causing pain, stiffness, and reduced mobility.</p>
+                    
+                    <h3>Common Causes</h3>
+                    <ul>
+                        <li>Age-related wear and tear</li>
+                        <li>Joint injuries from sports or accidents</li>
+                        <li>Obesity and excess weight</li>
+                        <li>Genetic predisposition</li>
+                        <li>Repetitive stress on joints</li>
+                    </ul>
+
+                    <h3>Physiotherapy Treatment Approaches</h3>
+                    <p>At Shreeji Physiotherapy, we employ a comprehensive approach to manage osteoarthritis:</p>
+                    <ul>
+                        <li><strong>Exercise Therapy:</strong> Strengthening exercises to support affected joints and improve mobility</li>
+                        <li><strong>Manual Therapy:</strong> Hands-on techniques to reduce pain and improve joint function</li>
+                        <li><strong>Modalities:</strong> Heat/ice therapy, ultrasound, and electrical stimulation for pain relief</li>
+                        <li><strong>Education:</strong> Posture correction, activity modification, and joint protection techniques</li>
+                    </ul>
+
+                    <h3>Benefits of Physiotherapy</h3>
+                    <p>Regular physiotherapy can help reduce pain, improve joint flexibility, enhance muscle strength, and enable you to maintain an active lifestyle despite osteoarthritis.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Sports Injury Recovery: From Injury to Return to Play",
+                category: "sports",
+                excerpt: "Learn about common sports injuries and how proper rehabilitation can help athletes return to peak performance safely and effectively.",
+                image: 'images/sport-injury.svg',
+                date: "March 12, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/sport-injury.svg" alt="Sports Injury Rehabilitation" class="modal-image">
+                    <h3>Common Sports Injuries</h3>
+                    <p>Sports injuries can range from minor sprains to serious ligament tears. Common injuries include:</p>
+                    <ul>
+                        <li>Ankle sprains</li>
+                        <li>ACL tears</li>
+                        <li>Rotator cuff injuries</li>
+                        <li>Muscle strains</li>
+                        <li>Tendinitis</li>
+                    </ul>
+
+                    <h3>Rehabilitation Phases</h3>
+                    <p>Our sports injury rehabilitation program follows a phased approach:</p>
+                    <ul>
+                        <li><strong>Phase 1 - Acute Management:</strong> Pain reduction, swelling control, and protection</li>
+                        <li><strong>Phase 2 - Recovery:</strong> Range of motion restoration and early strengthening</li>
+                        <li><strong>Phase 3 - Strengthening:</strong> Progressive resistance training and functional exercises</li>
+                        <li><strong>Phase 4 - Return to Sport:</strong> Sport-specific training and gradual return to activities</li>
+                    </ul>
+
+                    <h3>Why Professional Rehabilitation Matters</h3>
+                    <p>Proper rehabilitation prevents re-injury, ensures optimal recovery, and helps athletes return to their sport stronger and more resilient than before.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Cervical Spondylitis: Managing Neck Pain Effectively",
+                category: "orthopedic",
+                excerpt: "Neck pain from cervical spondylitis can be debilitating. Discover effective physiotherapy techniques to alleviate discomfort and restore neck mobility.",
+                image: 'images/cervical.svg',
+                date: "March 10, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/cervical.svg" alt="Cervical Spondylitis Treatment" class="modal-image">
+                    <h3>Understanding Cervical Spondylitis</h3>
+                    <p>Cervical spondylitis refers to age-related wear and tear of the spinal disks in the neck. This condition can cause chronic neck pain, stiffness, and sometimes numbness or weakness in arms.</p>
+                    
+                    <h3>Symptoms to Watch For</h3>
+                    <ul>
+                        <li>Persistent neck pain and stiffness</li>
+                        <li>Headaches originating from the neck</li>
+                        <li>Numbness or tingling in arms/hands</li>
+                        <li>Difficulty turning the head</li>
+                        <li>Weakness in arms or legs</li>
+                    </ul>
+
+                    <h3>Treatment Protocol</h3>
+                    <p>Our cervical spondylitis treatment includes:</p>
+                    <ul>
+                        <li><strong>Neck Exercises:</strong> Gentle stretching and strengthening exercises</li>
+                        <li><strong>Posture Correction:</strong> Ergonomic adjustments and postural training</li>
+                        <li><strong>Manual Therapy:</strong> Mobilization and manipulation techniques</li>
+                        <li><strong>Pain Management:</strong> Modalities like TENS, heat therapy, and ultrasound</li>
+                    </ul>
+
+                    <h3>Prevention Tips</h3>
+                    <p>Maintain good posture, take regular breaks from desk work, use proper ergonomics, and perform regular neck exercises to prevent or manage cervical spondylitis.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "Lower Back Pain: Understanding Lumbar Spondylitis",
+                category: "orthopedic",
+                excerpt: "Lower back pain affects millions. Learn how physiotherapy can help manage lumbar spondylitis and improve your quality of life.",
+                image: 'images/lumbar.svg',
+                date: "March 8, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/lumbar.svg" alt="Lumbar Spondylitis Treatment" class="modal-image">
+                    <h3>What is Lumbar Spondylitis?</h3>
+                    <p>Lumbar spondylitis involves inflammation and degeneration of the lower spine, causing chronic lower back pain that can significantly impact daily activities.</p>
+                    
+                    <h3>Risk Factors</h3>
+                    <ul>
+                        <li>Prolonged sitting or standing</li>
+                        <li>Heavy lifting with improper technique</li>
+                        <li>Age-related spinal degeneration</li>
+                        <li>Lack of physical activity</li>
+                        <li>Obesity</li>
+                    </ul>
+
+                    <h3>Comprehensive Treatment Plan</h3>
+                    <p>Our treatment approach focuses on:</p>
+                    <ul>
+                        <li><strong>Core Strengthening:</strong> Building stability in the lower back</li>
+                        <li><strong>Flexibility Training:</strong> Improving range of motion</li>
+                        <li><strong>Pain Relief:</strong> Various modalities for acute and chronic pain</li>
+                        <li><strong>Lifestyle Modifications:</strong> Activity modification and ergonomic advice</li>
+                    </ul>
+
+                    <h3>Recovery Expectations</h3>
+                    <p>With consistent physiotherapy, most patients experience significant pain reduction and improved function within 4-6 weeks of starting treatment.</p>
+                `
+            },
+            {
+                id: 5,
+                title: "Slip Disc: Non-Surgical Treatment Options",
+                category: "orthopedic",
+                excerpt: "A herniated disc doesn't always require surgery. Explore effective non-surgical physiotherapy treatments for slip disc recovery.",
+                image: 'images/slip-disc.svg',
+                date: "March 5, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/slip-disc.svg" alt="Slip Disc Treatment" class="modal-image">
+                    <h3>Understanding Slip Disc</h3>
+                    <p>A slipped or herniated disc occurs when the soft center of a spinal disc pushes through a crack in the tougher exterior. This can cause severe pain, numbness, or weakness.</p>
+                    
+                    <h3>Non-Surgical Treatment Options</h3>
+                    <ul>
+                        <li><strong>McKenzie Method:</strong> Specific exercises to reduce disc herniation</li>
+                        <li><strong>Spinal Traction:</strong> Decompression therapy to relieve pressure</li>
+                        <li><strong>Core Stabilization:</strong> Strengthening deep core muscles</li>
+                        <li><strong>Manual Therapy:</strong> Mobilization techniques</li>
+                        <li><strong>Postural Correction:</strong> Proper alignment and body mechanics</li>
+                    </ul>
+
+                    <h3>When Surgery is Considered</h3>
+                    <p>Surgery is typically only considered when conservative treatments fail after 6-12 weeks, or in cases of severe neurological symptoms.</p>
+
+                    <h3>Success Stories</h3>
+                    <p>Many of our patients with slip disc conditions have achieved full recovery through dedicated physiotherapy, avoiding the need for surgical intervention.</p>
+                `
+            },
+            {
+                id: 6,
+                title: "Tennis Elbow: Causes and Effective Relief Methods",
+                category: "sports",
+                excerpt: "Lateral epicondylitis, commonly known as tennis elbow, affects many. Learn about proven physiotherapy techniques for relief.",
+                image: 'images/tennis-elbow.svg',
+                date: "March 3, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/tennis-elbow.svg" alt="Tennis Elbow Treatment" class="modal-image">
+                    <h3>What is Tennis Elbow?</h3>
+                    <p>Tennis elbow (lateral epicondylitis) is an overuse injury causing pain on the outside of the elbow. Despite its name, it affects many people beyond tennis players.</p>
+                    
+                    <h3>Common Causes</h3>
+                    <ul>
+                        <li>Repetitive wrist and arm movements</li>
+                        <li>Activities involving gripping and twisting</li>
+                        <li>Computer work with poor ergonomics</li>
+                        <li>Manual labor tasks</li>
+                        <li>Sports activities with racquets</li>
+                    </ul>
+
+                    <h3>Physiotherapy Treatment</h3>
+                    <ul>
+                        <li><strong>Eccentric Exercises:</strong> Specific strengthening exercises for forearm muscles</li>
+                        <li><strong>Ultrasound Therapy:</strong> Deep tissue healing stimulation</li>
+                        <li><strong>Manual Therapy:</strong> Soft tissue mobilization</li>
+                        <li><strong>Ergonomic Adjustments:</strong> Activity modification advice</li>
+                        <li><strong>Bracing:</strong> Supportive devices when needed</li>
+                    </ul>
+
+                    <h3>Recovery Timeline</h3>
+                    <p>With proper treatment, most patients see improvement within 4-6 weeks, with full recovery typically taking 3-6 months.</p>
+                `
+            },
+            {
+                id: 7,
+                title: "Paralysis Rehabilitation: Restoring Function and Independence",
+                category: "neurological",
+                excerpt: "Stroke and neurological conditions can cause paralysis. Discover how comprehensive rehabilitation helps restore function and independence.",
+                image: 'images/paralysis.svg',
+                date: "March 1, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/paralysis.svg" alt="Paralysis Rehabilitation" class="modal-image">
+                    <h3>Understanding Paralysis</h3>
+                    <p>Paralysis can result from stroke, spinal cord injury, or neurological conditions. Physiotherapy plays a crucial role in maximizing recovery and independence.</p>
+                    
+                    <h3>Rehabilitation Goals</h3>
+                    <ul>
+                        <li>Restore motor function</li>
+                        <li>Improve balance and coordination</li>
+                        <li>Enhance daily living skills</li>
+                        <li>Prevent complications like muscle contractures</li>
+                        <li>Promote independence</li>
+                    </ul>
+
+                    <h3>Treatment Techniques</h3>
+                    <ul>
+                        <li><strong>Motor Re-education:</strong> Relearning movement patterns</li>
+                        <li><strong>Functional Training:</strong> Task-specific exercises</li>
+                        <li><strong>Balance Training:</strong> Improving stability and preventing falls</li>
+                        <li><strong>Gait Training:</strong> Walking retraining with assistive devices</li>
+                        <li><strong>Family Education:</strong> Home exercise programs and care strategies</li>
+                    </ul>
+
+                    <h3>Hope and Progress</h3>
+                    <p>While recovery timelines vary, consistent rehabilitation can lead to significant improvements in function and quality of life, even years after injury.</p>
+                `
+            },
+            {
+                id: 8,
+                title: "Muscular Problems: From Fibromyalgia to Muscle Strains",
+                category: "orthopedic",
+                excerpt: "Muscle pain can stem from various causes. Learn about different muscular conditions and how physiotherapy addresses them.",
+                image: 'images/muscular.svg',
+                date: "February 28, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/muscular.svg" alt="Muscular Problems Treatment" class="modal-image">
+                    <h3>Common Muscular Conditions</h3>
+                    <p>Muscular problems encompass a wide range of conditions, from acute strains to chronic conditions like fibromyalgia.</p>
+                    
+                    <h3>Types of Muscular Problems</h3>
+                    <ul>
+                        <li><strong>Muscle Strains:</strong> Tears in muscle fibers</li>
+                        <li><strong>Fibromyalgia:</strong> Widespread muscle pain and tenderness</li>
+                        <li><strong>Myofascial Pain:</strong> Trigger points causing referred pain</li>
+                        <li><strong>Muscle Spasms:</strong> Involuntary muscle contractions</li>
+                        <li><strong>Muscle Weakness:</strong> Reduced strength from various causes</li>
+                    </ul>
+
+                    <h3>Treatment Approaches</h3>
+                    <ul>
+                        <li><strong>Soft Tissue Mobilization:</strong> Manual techniques to release tension</li>
+                        <li><strong>Therapeutic Exercise:</strong> Stretching and strengthening programs</li>
+                        <li><strong>Dry Needling:</strong> For trigger point release</li>
+                        <li><strong>Pain Management:</strong> Modalities and techniques for relief</li>
+                        <li><strong>Education:</strong> Self-management strategies</li>
+                    </ul>
+
+                    <h3>Personalized Care</h3>
+                    <p>Each muscular condition requires a tailored approach. Our treatment plans are customized based on your specific symptoms and goals.</p>
+                `
+            },
+            {
+                id: 9,
+                title: "Frozen Shoulder: Breaking Through the Stiffness",
+                category: "orthopedic",
+                excerpt: "Adhesive capsulitis, or frozen shoulder, can severely limit movement. Learn about progressive treatment protocols for recovery.",
+                image: 'images/frozen-shoulder.svg',
+                date: "February 25, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/frozen-shoulder.svg" alt="Frozen Shoulder Treatment" class="modal-image">
+                    <h3>What is Frozen Shoulder?</h3>
+                    <p>Frozen shoulder (adhesive capsulitis) causes severe stiffness and pain in the shoulder joint, making movement extremely difficult.</p>
+                    
+                    <h3>Three Stages of Frozen Shoulder</h3>
+                    <ul>
+                        <li><strong>Freezing Stage:</strong> Progressive pain and stiffness (2-9 months)</li>
+                        <li><strong>Frozen Stage:</strong> Stiffness persists, pain may decrease (4-12 months)</li>
+                        <li><strong>Thawing Stage:</strong> Gradual return of motion (12-24 months)</li>
+                    </ul>
+
+                    <h3>Treatment Strategies</h3>
+                    <ul>
+                        <li><strong>Gentle Mobilization:</strong> Passive and active range of motion exercises</li>
+                        <li><strong>Stretching Programs:</strong> Progressive stretching protocols</li>
+                        <li><strong>Pain Management:</strong> Modalities and techniques to reduce discomfort</li>
+                        <li><strong>Manual Therapy:</strong> Joint mobilization techniques</li>
+                        <li><strong>Home Exercise Program:</strong> Consistent daily exercises</li>
+                    </ul>
+
+                    <h3>Preventing Recurrence</h3>
+                    <p>Early treatment and consistent exercise can help prevent frozen shoulder from recurring and speed up recovery time.</p>
+                `
+            },
+            {
+                id: 10,
+                title: "Sciatica: Understanding Nerve Pain and Treatment",
+                category: "orthopedic",
+                excerpt: "Sciatic nerve pain can be excruciating. Discover effective physiotherapy approaches to relieve pain and restore function.",
+                image: 'images/sciatica.svg',
+                date: "February 22, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/sciatica.svg" alt="Sciatica Treatment" class="modal-image">
+                    <h3>Understanding Sciatica</h3>
+                    <p>Sciatica refers to pain radiating along the sciatic nerve, which runs from your lower back through your hips and down each leg. It's often caused by a herniated disc pressing on the nerve.</p>
+                    
+                    <h3>Symptoms</h3>
+                    <ul>
+                        <li>Sharp, burning pain down the leg</li>
+                        <li>Numbness or weakness in leg/foot</li>
+                        <li>Tingling sensations</li>
+                        <li>Difficulty moving or walking</li>
+                        <li>Pain worsened by sitting</li>
+                    </ul>
+
+                    <h3>Physiotherapy Solutions</h3>
+                    <ul>
+                        <li><strong>Nerve Gliding Exercises:</strong> Gentle movements to free the nerve</li>
+                        <li><strong>Core Stabilization:</strong> Strengthening to support the spine</li>
+                        <li><strong>McKenzie Exercises:</strong> Directional preference movements</li>
+                        <li><strong>Postural Correction:</strong> Reducing pressure on the nerve</li>
+                        <li><strong>Pain Management:</strong> Modalities and techniques for relief</li>
+                    </ul>
+
+                    <h3>Recovery Outlook</h3>
+                    <p>Most sciatica cases respond well to conservative physiotherapy treatment, with significant improvement often seen within 4-8 weeks.</p>
+                `
+            },
+            {
+                id: 11,
+                title: "Women's Health Physiotherapy: Specialized Care for Women",
+                category: "womens-health",
+                excerpt: "Women face unique health challenges. Learn about specialized physiotherapy services addressing women's specific health needs.",
+                image: 'images/womens-health.svg',
+                date: "February 20, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/womens-health.svg" alt="Women's Health Physiotherapy" class="modal-image">
+                    <h3>Women's Health Conditions</h3>
+                    <p>Women's health physiotherapy addresses conditions specific to or more common in women, requiring specialized knowledge and sensitive care.</p>
+                    
+                    <h3>Common Conditions Treated</h3>
+                    <ul>
+                        <li><strong>Pelvic Floor Dysfunction:</strong> Weakness or tension in pelvic muscles</li>
+                        <li><strong>Urinary Incontinence:</strong> Loss of bladder control</li>
+                        <li><strong>Post-Surgical Rehabilitation:</strong> Recovery after gynecological procedures</li>
+                        <li><strong>Pelvic Pain:</strong> Chronic pain in the pelvic region</li>
+                        <li><strong>Diastasis Recti:</strong> Separation of abdominal muscles</li>
+                    </ul>
+
+                    <h3>Treatment Approach</h3>
+                    <ul>
+                        <li><strong>Pelvic Floor Exercises:</strong> Strengthening and relaxation techniques</li>
+                        <li><strong>Biofeedback:</strong> Monitoring and training pelvic muscles</li>
+                        <li><strong>Manual Therapy:</strong> Gentle internal and external techniques</li>
+                        <li><strong>Education:</strong> Lifestyle modifications and self-care</li>
+                        <li><strong>Supportive Environment:</strong> Comfortable, private, and respectful care</li>
+                    </ul>
+
+                    <h3>Why It Matters</h3>
+                    <p>Specialized women's health physiotherapy can significantly improve quality of life, confidence, and daily functioning for many women.</p>
+                `
+            },
+            {
+                id: 12,
+                title: "Pregnancy Care: Supporting Mothers Before, During, and After",
+                category: "womens-health",
+                excerpt: "Pregnancy brings physical changes. Discover how physiotherapy supports mothers through pregnancy and postpartum recovery.",
+                image: 'images/pregnancy.svg',
+                date: "February 18, 2024",
+                author: "Dr. Bharti Sarswat",
+                content: `
+                    <img src="images/pregnancy.svg" alt="Pregnancy Care Physiotherapy" class="modal-image">
+                    <h3>Pregnancy Physiotherapy Benefits</h3>
+                    <p>Physiotherapy during pregnancy helps manage common discomforts, prepares the body for childbirth, and supports postpartum recovery.</p>
+                    
+                    <h3>Prenatal Care</h3>
+                    <ul>
+                        <li><strong>Pain Management:</strong> Addressing back pain, pelvic pain, and sciatica</li>
+                        <li><strong>Safe Exercise:</strong> Appropriate exercises for each trimester</li>
+                        <li><strong>Posture Correction:</strong> Adapting to body changes</li>
+                        <li><strong>Pelvic Floor Preparation:</strong> Strengthening for childbirth</li>
+                        <li><strong>Breathing Techniques:</strong> For labor and delivery</li>
+                    </ul>
+
+                    <h3>Postpartum Recovery</h3>
+                    <ul>
+                        <li><strong>Core Rehabilitation:</strong> Restoring abdominal strength</li>
+                        <li><strong>Pelvic Floor Recovery:</strong> Healing and strengthening</li>
+                        <li><strong>Back Pain Relief:</strong> Addressing postural changes</li>
+                        <li><strong>Diastasis Recti Treatment:</strong> Closing abdominal separation</li>
+                        <li><strong>Return to Exercise:</strong> Gradual, safe progression</li>
+                    </ul>
+
+                    <h3>Specialized Support</h3>
+                    <p>Our pregnancy care program is designed to support mothers through this transformative journey, ensuring optimal health and recovery.</p>
+                `
+            }
+        ];
+
+
+        // Render blog posts
+        function renderBlogPosts(posts) {
+            const grid = document.getElementById('blogGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (posts.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            grid.innerHTML = posts.map(post => `
+                <div class="blog-card" data-post-id="${post.id}">
+                    <img src="${post.image}" alt="${post.title}" class="blog-image">
+                    <div class="blog-card-content">
+                        <span class="blog-category">${post.category}</span>
+                        <h3>${post.title}</h3>
+                        <p class="blog-excerpt">${post.excerpt}</p>
+                        <div class="blog-meta">
+                            <span>${post.date} • ${post.author}</span>
+                            <a href="#" class="read-more">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            document.querySelectorAll('.blog-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const postId = parseInt(this.dataset.postId);
+                    const post = blogPosts.find(p => p.id === postId);
+                    openModal(post);
+                });
+            });
+        }
+
+        // Filter and search functionality
+        let currentCategory = 'all';
+        let searchQuery = '';
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchQuery = e.target.value.toLowerCase();
+            filterPosts();
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                filterPosts();
+            });
+        });
+
+        function filterPosts() {
+            let filtered = blogPosts.filter(post => {
+                const matchesCategory = currentCategory === 'all' || post.category === currentCategory;
+                const matchesSearch = post.title.toLowerCase().includes(searchQuery) || 
+                                    post.excerpt.toLowerCase().includes(searchQuery) ||
+                                    post.content.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+            renderBlogPosts(filtered);
+        }
+
+        // Modal functionality
+        function openModal(post) {
+            document.getElementById('modalTitle').textContent = post.title;
+            document.getElementById('modalBody').innerHTML = post.content;
+            document.getElementById('blogModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('blogModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('blogModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Initial render
+        renderBlogPosts(blogPosts);
+    </script>
+</body>
+</html>
+
