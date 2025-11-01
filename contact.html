@@ -55,15 +55,15 @@
     </nav>
 
     <!-- Page Header -->
-    <section class="page-header">
+    <section class="page-header" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); padding: 5rem 0;">
         <div class="container">
-            <h1>Contact Us</h1>
-            <p>We're here to help. Get in touch with us today.</p>
+            <h1 style="color: white; margin-bottom: 1rem; font-size: 3rem;">Contact Us</h1>
+            <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.25rem;">We're here to help. Get in touch with us today.</p>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact section-padding" style="background: var(--bg-light);">
+    <section class="contact section-padding" style="background: var(--bg-light); padding-top: 4rem; padding-bottom: 4rem;">
         <div class="container">
             <!-- Header -->
             <div class="section-header" style="max-width: 700px; margin: 0 auto 3rem;">
@@ -156,18 +156,26 @@
     </section>
 
     <!-- Map Section -->
-    <section class="map-section">
-        <div class="map-container">
-            <div class="map-placeholder">
-                <svg width="100%" height="100%" viewBox="0 0 800 400" fill="none">
-                    <rect width="800" height="400" fill="#f3f4f6"/>
-                    <circle cx="400" cy="200" r="50" fill="#6366f1" opacity="0.3"/>
-                    <circle cx="400" cy="200" r="10" fill="#6366f1"/>
-                    <text x="400" y="230" text-anchor="middle" fill="#6b7280" font-size="16">Plot No. 65E, Sec.-12, Greater Noida West</text>
-                </svg>
-                <div class="map-overlay">
-                    <p>📍 Plot No. 65E, Sec.-12, Greater Noida West, Gautam Buddha Nagar (U.P)</p>
-                </div>
+    <section class="map-section section-padding" style="background: white;">
+        <div class="container">
+            <div class="map-header" style="text-align: center; margin-bottom: 3rem;">
+                <h2 class="section-title" style="margin-bottom: 1rem;">Find Us on Map</h2>
+                <p class="section-description" style="max-width: 600px; margin: 0 auto;">Visit us at our clinic located in Greater Noida West. We're easily accessible and have convenient parking available.</p>
+            </div>
+            <div class="map-wrapper" style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); height: 500px;">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.3179169293408!2d77.48490187633378!3d28.560214675704326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ced007d552577%3A0x95bf4f74bdee84d1!2sShreeji%20Pharmacy%20and%20Physiotherapy%20center!5e0!3m2!1sen!2sin!4v1762014896732!5m2!1sen!2sin" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            <div class="map-info" style="margin-top: 2rem; text-align: center; padding: 1.5rem; background: var(--bg-light); border-radius: 12px;">
+                <p style="color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem; font-size: 1.125rem;">📍 Shreeji Pharmacy and Physiotherapy center</p>
+                <p style="color: var(--text-light); margin: 0;">Plot No. 65E, Sec.-12, Greater Noida West, Gautam Buddha Nagar (U.P)</p>
             </div>
         </div>
     </section>
