@@ -593,6 +593,14 @@
         gap: 2rem !important;
     }
 
+    .services-grid[style*="grid-template-columns: repeat(2, 1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .pharmacy-contact > div > div[style*="grid-template-columns: repeat(2, 1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
+
     .contact-icon {
         width: 40px;
         height: 40px;
